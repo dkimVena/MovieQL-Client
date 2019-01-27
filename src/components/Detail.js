@@ -1,8 +1,8 @@
 import React from 'react';
 import { Query } from 'react-apollo';
 import { MOVIE_DETAILS } from '../queries';
-import Movie from "./Movie";
-import styled from "styled-components";
+import Movie from './Movie';
+import styled from 'styled-components';
 
 const Container = styled.div`
   display: grid;
@@ -16,7 +16,11 @@ const Card = styled.div`
   border-radius: 7px;
 `;
 
-const Image = Card.withComponent("img");
+const Content = styled.div`
+  margin-left: 30px;
+`;
+
+const Image = Card.withComponent('img');
 
 const Title = styled.h1`
   font-size: 24px;
@@ -26,7 +30,7 @@ const Title = styled.h1`
 const Paragraph = styled.span`
   margin-bottom: 10px;
   display: block;
-  font-weight: ${props => (props.bold ? "500" : "400")};
+  font-weight: ${props => (props.bold ? '500' : '400')};
 `;
 
 const MovieContainer = styled.div`
@@ -42,37 +46,47 @@ const Detail = ({
     params: { movieId }
   }
 }) => (
-  <Query query={MOVIE_DETAILS} variables={{movieId}}>
-    {
-      ({loading, error, data}) => {
-        if(loading) return <lds-roller><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div></lds-roller>;
-        if(error) return "Error";
+  <Query query={MOVIE_DETAILS} variables={{ movieId }}>
+    {({ loading, error, data }) => {
+      if (loading)
         return (
-          <React.Fragment>
-            <Container>
-              <Image src={data.movie.medium_cover_image} />
-              <span>
-                <Title>{data.movie.title}</Title>
-                <Paragraph bold>Rating: {data.movie.rating}</Paragraph>
-                <Paragraph>{data.movie.description_intro}</Paragraph>
-              </span>
-            </Container>
-            <Title>Suggested</Title>
-            <MovieContainer>
-              {data.suggestions.map(movie => (
-                <Movie
-                  key={movie.id}
-                  id={movie.id}
-                  title={movie.title}
-                  rating={movie.rating}
-                  poster={movie.medium_cover_image}
-                />
-              ))}
-            </MovieContainer>
-          </React.Fragment>
+          <lds-roller>
+            <div />
+            <div />
+            <div />
+            <div />
+            <div />
+            <div />
+            <div />
+            <div />
+          </lds-roller>
         );
-      }
-    }
+      if (error) return 'Error';
+      return (
+        <React.Fragment>
+          <Container>
+            <Image src={data.movie.medium_cover_image} />
+            <Content>
+              <Title>{data.movie.title}</Title>
+              <Paragraph bold>Rating: {data.movie.rating}</Paragraph>
+              <Paragraph>{data.movie.description_intro}</Paragraph>
+            </Content>
+          </Container>
+          <Title>Suggested</Title>
+          <MovieContainer>
+            {data.suggestions.map(movie => (
+              <Movie
+                key={movie.id}
+                id={movie.id}
+                title={movie.title}
+                rating={movie.rating}
+                poster={movie.medium_cover_image}
+              />
+            ))}
+          </MovieContainer>
+        </React.Fragment>
+      );
+    }}
   </Query>
 );
 
