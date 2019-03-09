@@ -1,3 +1,3 @@
 # MovieQL
 
-Client for the MovieQL API built with Apollo
+[DEMO](https://gookmovieql.herokuapp.com/#/)
